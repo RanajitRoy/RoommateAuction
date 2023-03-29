@@ -2,6 +2,9 @@ package com.rmauction.roomservice.controllers;
 
 import com.rmauction.roomservice.entities.Room;
 import com.rmauction.roomservice.services.RoomService;
+
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +28,11 @@ public class RoomServiceController {
 
     @GetMapping(path="/{id}")
     public Room getRooms(@PathVariable long id) {
-        return roomService.getRoomsById(id);
+        Optional<Room> room = roomService.getRoomsById(id);
+        if(room.isPresent()) {
+            return room.get();
+        }
+        else throw new RoomNotFoundException();
     }
 
     @GetMapping

@@ -2,6 +2,9 @@ package com.rmauction.roomservice.services;
 
 import com.rmauction.roomservice.entities.Room;
 import com.rmauction.roomservice.repositories.RoomRepository;
+
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,8 +28,8 @@ public class RoomService {
         return roomRepository.findAll(PageRequest.of(pageNo,pageSize));
     }
 
-    public Room getRoomsById(long id) {
-        return roomRepository.getReferenceById(id);
+    public Optional<Room> getRoomsById(long id) {
+        return roomRepository.findById(id);
     }
 
     public Room createRoom(Room newRoom) {
