@@ -1,15 +1,37 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+import {createBrowserRouter, Route, createRoutesFromElements, RouterProvider} from "react-router-dom";
+
+// theme
+import "./custom-theme.scss"
+
+// pages
+import Home from './pages/Home';
+
+// layouts
+import RootLayout from './layout/RootLayout';
+import NotFound from './pages/NotFound';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<RootLayout />}>
+      <Route index element={<Home />}/>
+      <Route path="Rooms" element={<Home />}/>
+
+      <Route path="*" element={<NotFound />} />
+    </Route>
+  )
+)
+
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
