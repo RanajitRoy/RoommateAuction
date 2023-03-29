@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/roomdb
+    username: royra
+    password: newPass3029
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      show-sql: true
+
+  main:
+    web-application-type: servlet
