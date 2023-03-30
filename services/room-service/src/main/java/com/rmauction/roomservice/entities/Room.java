@@ -1,10 +1,12 @@
 package com.rmauction.roomservice.entities;
 
+import java.util.List;
+
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 /**
  * @author Ranajit Roy on 3/28/2023
@@ -21,6 +23,24 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roomIdSequence")
     private long roomId;
 
-    @NonNull
+    @Nonnull
     private String roomName;
+
+    @Nonnull
+    private long creatorId;
+
+    @Nonnull
+    @JoinTable(
+        name = "ROOM_USER",
+        joinColumns = @JoinColumn(
+                name = "roomId",
+                referencedColumnName = "PID"
+        ),
+        inverseJoinColumns = @JoinColumn(
+                name = "userId",
+                referencedColumnName = "TID"
+        )
+)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "roomId")
+    private List<RoomParticipator> participators;
 }

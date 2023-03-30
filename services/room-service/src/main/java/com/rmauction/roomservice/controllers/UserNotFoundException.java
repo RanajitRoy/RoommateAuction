@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 /**
  * @author Ranajit Roy on 3/29/2023
  */
-@ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "No such Room or User found!")
-public class RoomNotFoundException extends RuntimeException {
+@ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "No such User found!")
+public class UserNotFoundException extends RuntimeException {
 
 }
