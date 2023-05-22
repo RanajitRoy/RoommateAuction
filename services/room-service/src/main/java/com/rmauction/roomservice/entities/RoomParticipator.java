@@ -15,12 +15,12 @@ import lombok.NoArgsConstructor;
 
  @Entity
  @Data
- @NoArgsConstructor
+//  @NoArgsConstructor
  @AllArgsConstructor
 public class RoomParticipator {
-    @ManyToOne
-    private Room room;
+    // @ManyToOne
+    // private Room room;
     
-    @Nonnull
-    private long userId;
+    // @Nonnull
+    // private long userId;
 }

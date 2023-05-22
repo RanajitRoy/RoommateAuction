@@ -1,5 +1,7 @@
 package com.rmauction.roomservice.services;
 
+import com.rmauction.roomservice.controllers.RoomNotFoundException;
+import com.rmauction.roomservice.controllers.UserNotFoundException;
 import com.rmauction.roomservice.entities.Room;
 import com.rmauction.roomservice.entities.RoomParticipator;
 import com.rmauction.roomservice.entities.User;
@@ -9,6 +11,7 @@ import com.rmauction.roomservice.repositories.UserRepository;
 import jakarta.persistence.criteria.Join;
 
 import java.util.List;
+import java.util.Set;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,56 +34,44 @@ public class RoomService {
     @Autowired
     private UserRepository userRepository;
 
-    public Page<Room> getRooms(long userId) {
-        return getRooms(0, 10, userId);
-    }
 
-    public Page<Room> getRooms(int pageNo, int pageSize, long userId) {
-        Specification<Room> spec = hasParticipator(userId);
-        return roomRepository.findAll(spec., PageRequest.of(pageNo,pageSize));
-    }
-
-    public Optional<Room> getRoomsById(long id, long userId) {
-        Optional<User> uf = userRepository.findById(userId);
-        if(uf.isPresent()) {
-            Optional<Room> opt = roomRepository.findById(id);
-            if(opt.isPresent() && opt.get().getCreatorId() == userId) {
-                return opt;
-            }
-            else return Optional.empty();
+    public Room getRoom(long roomId) {
+        Optional<Room> or = roomRepository.findById(roomId);
+        if(or.isEmpty()){
+            throw new RoomNotFoundException();
         }
-        return Optional.empty();
+        return or.get();
     }
 
-    public Optional<Room> createRoom(String roomName, long userId) {
+    public List<Room> getRoomByCreator(long creatorId) {
+        List<Room> or = roomRepository.findByCreatorId(creatorId);
+        return or;
+    }
+   
+    public Room createRoom(String roomName, long userId) {
         Optional<User> uf = userRepository.findById(userId);
         if(uf.isPresent()) {
+            User user = uf.get();
             Room newRoom = new Room();
             newRoom.setCreatorId(userId);
             newRoom.setRoomName(roomName);
-            newRoom.setParticipators(List.of(new RoomParticipator(newRoom, userId)));
-            return Optional.of(roomRepository.save(newRoom));
+            user.getRooms().add(newRoom);
+            newRoom.getParticipators().add(user);
+            return roomRepository.save(newRoom);
         }
-        return Optional.empty();
+        return null;
     }
 
-    public Optional<Room> addRoomParticipator(long roomId, long userId, long creatorId) {
+    public Room addRoomParticipator(long roomId, long userId) {
+        Optional<Room> rf = roomRepository.findById(roomId);
         Optional<User> uf = userRepository.findById(userId);
-        if(uf.isPresent()) {
-            Optional<Room> room = getRoomsById(roomId, creatorId);
-            Room newRoom = new Room();
-            newRoom.setCreatorId(userId);
-            newRoom.setRoomName(roomName);
-            newRoom.setParticipators(List.of(new RoomParticipator(newRoom, userId)));
-            return Optional.of(roomRepository.save(newRoom));
+        if(rf.isPresent() && uf.isPresent()) {
+            Room room = rf.get();
+            User user = uf.get();
+            user.getRooms().add(room);
+            room.getParticipators().add(user);
+            return roomRepository.save(room);
         }
-        return Optional.empty();
-    }
-
-    public static Specification<Room> hasParticipator(long userId) {
-        return (root, query, criteriaBuilder) -> {
-            Join<Room, RoomParticipator> roomParts = root.join("participators");
-            return criteriaBuilder.equal(roomParts.get("userId"), userId);
-        };
+        return null;
     }
 }

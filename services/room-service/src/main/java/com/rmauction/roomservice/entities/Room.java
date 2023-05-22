@@ -1,6 +1,6 @@
 package com.rmauction.roomservice.entities;
 
-import java.util.List;
+import java.util.Set;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
@@ -30,17 +30,17 @@ public class Room {
     private long creatorId;
 
     @Nonnull
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "roomId")
     @JoinTable(
         name = "ROOM_USER",
         joinColumns = @JoinColumn(
                 name = "roomId",
-                referencedColumnName = "PID"
+                referencedColumnName = "roomId"
         ),
         inverseJoinColumns = @JoinColumn(
                 name = "userId",
-                referencedColumnName = "TID"
+                referencedColumnName = "userId"
         )
-)
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "roomId")
-    private List<RoomParticipator> participators;
+    )
+    private Set<User> participators;
 }

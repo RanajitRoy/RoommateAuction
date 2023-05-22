@@ -2,8 +2,9 @@ package com.rmauction.roomservice.controllers;
 
 import com.rmauction.roomservice.entities.Room;
 import com.rmauction.roomservice.services.RoomService;
+import com.rmauction.roomservice.services.UserService;
 
-import java.util.Optional;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,38 +21,39 @@ public class RoomServiceController {
     @Autowired
     private RoomService roomService;
 
-    @GetMapping(path="/{pageNo}/{pageSize}")
-    public Page<Room> getRooms(@PathVariable int pageNo, @PathVariable int pageSize, @RequestParam(required = true) long userId) {
-        Optional<Page<Room>> page = roomService.getRooms(pageNo, pageSize, userId);
-        if(page.isPresent())
-            return page.get();
-        throw new UserNotFoundException();
+    // getting a room by id
+    @GetMapping(path="/{roomId}")
+    public Room getRoom(@PathVariable long roomId) {
+        Room room = roomService.getRoom(roomId);
+        if(room != null)
+            return room;
+        throw new RoomNotFoundException();
     }
 
-    @GetMapping(path="/{id}")
-    public Room getRooms(@PathVariable long id, @RequestParam(required = true) long userId) {
-        Optional<Room> room = roomService.getRoomById(id, userId);
-        if(room.isPresent()) {
-            return room.get();
-        }
-        else throw new RoomNotFoundException();
-    }
-
+    // getting rooms created by a user.
     @GetMapping
-    public Page<Room> getRooms(@RequestParam(required = true) long userId) {
-        Optional<Page<Room>> page = roomService.getRooms(userId);
-        if(page.isPresent())
-            return page.get();
-        throw new UserNotFoundException();
+    public List<Room> getRoomByCreator(@RequestParam(required = true) long creatorId) {
+        List<Room> rooms = roomService.getRoomByCreator(creatorId);
+        return rooms;
     }
 
     record RoomReq(String roomName){}
 
+    // create a new room
     @PostMapping
-    public Room createRooms(@RequestBody RoomReq roomReq, @RequestParam(required = true) long userId) {
-        Optional<Room> room = roomService.createRoom(roomReq.roomName, userId);
-        if(room.isPresent())
-            return room.get();
+    public Room createRoom(@RequestBody RoomReq roomReq, @RequestParam(required = true) long creatorId) {
+        Room room = roomService.createRoom(roomReq.roomName, creatorId);
+        if(room != null)
+            return room;
+        throw new UserNotFoundException();
+    }
+
+    // create a new room
+    @PutMapping(path="/{roomId}/creatorId")
+    public Room addParticipator(@PathVariable long roomId, @PathVariable long creatorId) {
+        Room room = roomService.addRoomParticipator(roomId, creatorId);
+        if(room != null)
+            return room;
         throw new UserNotFoundException();
     }
 }
