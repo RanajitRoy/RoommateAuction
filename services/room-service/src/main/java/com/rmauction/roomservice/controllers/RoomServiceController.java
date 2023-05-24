@@ -1,6 +1,7 @@
 package com.rmauction.roomservice.controllers;
 
 import com.rmauction.roomservice.entities.Room;
+import com.rmauction.roomservice.entities.User;
 import com.rmauction.roomservice.services.RoomService;
 import com.rmauction.roomservice.services.UserService;
 
@@ -30,6 +31,14 @@ public class RoomServiceController {
         throw new RoomNotFoundException();
     }
 
+//    @GetMapping(path="/{roomId}/participators")
+//    public List<User> getRoomParticipators(@PathVariable long roomId) {
+//        Room room = roomService.getRoom(roomId);
+//        if(room != null)
+//            return room.getParticipators();
+//        throw new RoomNotFoundException();
+//    }
+
     // getting rooms created by a user.
     @GetMapping
     public List<Room> getRoomByCreator(@RequestParam(required = true) long creatorId) {
@@ -49,7 +58,7 @@ public class RoomServiceController {
     }
 
     // create a new room
-    @PutMapping(path="/{roomId}/creatorId")
+    @PutMapping(path="/{roomId}/add/{creatorId}")
     public Room addParticipator(@PathVariable long roomId, @PathVariable long creatorId) {
         Room room = roomService.addRoomParticipator(roomId, creatorId);
         if(room != null)

@@ -1,11 +1,13 @@
 package com.rmauction.roomservice.entities;
 
-import java.util.Set;
+import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -16,6 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class Room {
 
     @Id
@@ -30,7 +33,7 @@ public class Room {
     private long creatorId;
 
     @Nonnull
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "roomId")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
         name = "ROOM_USER",
         joinColumns = @JoinColumn(
@@ -42,5 +45,5 @@ public class Room {
                 referencedColumnName = "userId"
         )
     )
-    private Set<User> participators;
+    private List<User> participators = new LinkedList<>();
 }

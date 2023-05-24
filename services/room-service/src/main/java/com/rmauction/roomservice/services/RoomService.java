@@ -3,16 +3,14 @@ package com.rmauction.roomservice.services;
 import com.rmauction.roomservice.controllers.RoomNotFoundException;
 import com.rmauction.roomservice.controllers.UserNotFoundException;
 import com.rmauction.roomservice.entities.Room;
-import com.rmauction.roomservice.entities.RoomParticipator;
+//import com.rmauction.roomservice.entities.RoomParticipator;
 import com.rmauction.roomservice.entities.User;
 import com.rmauction.roomservice.repositories.RoomRepository;
 import com.rmauction.roomservice.repositories.UserRepository;
 
 import jakarta.persistence.criteria.Join;
 
-import java.util.List;
-import java.util.Set;
-import java.util.Optional;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -43,6 +41,14 @@ public class RoomService {
         return or.get();
     }
 
+    public List<User> getRoomParticipators(long roomId) {
+        Optional<Room> or = roomRepository.findById(roomId);
+        if(or.isEmpty()){
+            throw new RoomNotFoundException();
+        }
+        return or.get().getParticipators();
+    }
+
     public List<Room> getRoomByCreator(long creatorId) {
         List<Room> or = roomRepository.findByCreatorId(creatorId);
         return or;
@@ -68,6 +74,10 @@ public class RoomService {
         if(rf.isPresent() && uf.isPresent()) {
             Room room = rf.get();
             User user = uf.get();
+            if(room.getParticipators().stream().anyMatch(x -> x.getUserId() == user.getUserId()))
+            {
+                return room;
+            }
             user.getRooms().add(room);
             room.getParticipators().add(user);
             return roomRepository.save(room);
