@@ -1,6 +1,6 @@
 package com.rmauction.roomservice.kafka;
 
-import com.rmauction.kafkainterface.events.Event;
+import com.rmauction.roomservice.kafka.events.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
 package com.rmauction.roomservice.kafka.config;
 
-import com.rmauction.kafkainterface.events.Event;
-import com.rmauction.kafkainterface.events.EventDeserializer;
+import com.rmauction.roomservice.kafka.events.Event;
+import com.rmauction.roomservice.kafka.events.EventDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

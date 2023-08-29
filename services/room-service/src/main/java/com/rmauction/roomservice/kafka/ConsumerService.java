@@ -1,7 +1,7 @@
 package com.rmauction.roomservice.kafka;
 
-import com.rmauction.kafkainterface.events.Event;
-import com.rmauction.kafkainterface.events.IEventHandler;
+import com.rmauction.roomservice.kafka.events.Event;
+import com.rmauction.roomservice.kafka.events.IEventHandler;
 import lombok.Setter;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
