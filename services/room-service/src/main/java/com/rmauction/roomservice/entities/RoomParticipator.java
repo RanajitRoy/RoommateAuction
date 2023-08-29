@@ -1,4 +1,4 @@
-//package com.rmauction.roomservice.entities;
+package com.rmauction.roomservice.entities;//package com.rmauction.roomservice.entities;
 //
 //import jakarta.annotation.Nonnull;
 //import jakarta.persistence.Entity;
