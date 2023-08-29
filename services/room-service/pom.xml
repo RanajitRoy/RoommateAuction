@@ -11,7 +11,7 @@
 	<groupId>com.rmauction</groupId>
 	<artifactId>roomservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>roomservice</name>
+	<name>room-service</name>
 	<description>Room Service</description>
 	<properties>
 		<java.version>17</java.version>
